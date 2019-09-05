@@ -3,6 +3,19 @@
            https://api.github.com/users/<your name>
 */
 
+function getMyData() {
+  axios.get("https://api.github.com/users/CarnunMP")
+  .then(response => {
+    // debugger
+    console.log(createCard(response));
+  })
+  .catch(error => {
+    debugger
+  });
+}
+
+getMyData();
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -45,6 +58,46 @@ const followersArray = [];
 </div>
 
 */
+
+function createCard(userObject) {  
+  const [card, image, cardInfo, name] = ["div", "img", "div", "h3"].map(tag => {
+    return document.createElement(tag);
+  });
+  card.setAttribute("class", "card");
+  image.setAttribute("src", `${userObject.data.avatar_url}`);
+  cardInfo.setAttribute("class", "card-info");
+  name.setAttribute("class", "name");
+  name.textContent = userObject.data.name;
+  
+  const pArray = [];
+  for (let i = 0; i < 6; i++) {
+    pArray.push(document.createElement("p"));
+  }
+  const [username, location, profile, followers, following, bio] = pArray;
+  username.setAttribute("class", "username");
+  username.textContent = userObject.data.login;
+  location.textContent = userObject.data.location;
+  profile.textContent = "Profile : ";
+  const profileLink = document.createElement("a");
+  profileLink.setAttribute("href", `https://github.com/${userObject.data.login}/${userObject.data.login}.github.io`);
+  profileLink.textContent = `https://github.com/${userObject.data.login}/${userObject.data.login}.github.io`;
+  profile.appendChild(profileLink);
+  followers.textContent = `Followers: ${userObject.data.followers}`;
+  following.textContent = `Following: ${userObject.data.following}`;
+  bio.textContent = `Bio: ${userObject.data.bio}`;
+
+  const cardChildren = [image, cardInfo];
+  cardChildren.forEach(child => {
+    card.appendChild(child);
+  });
+
+  const cardInfoChildren = [name, username, location, profile, followers, following, bio];
+  cardInfoChildren.forEach(child => {
+    cardInfo.appendChild(child);
+  })
+
+  return card;
+}
 
 /* List of LS Instructors Github username's: 
   tetondan
