@@ -3,6 +3,24 @@
            https://api.github.com/users/<your name>
 */
 
+const cards = document.querySelector(".cards");
+function getData(user) {
+  axios.get(`https://api.github.com/users/${user}`)
+  .then(response => {
+    // debugger
+    const userData = createCard(response.data);
+    cards.appendChild(userData);
+  })
+  .catch(error => {
+    debugger
+  });
+}
+
+const usersArray = ["CarnunMP", "tetondan", "dustinmyers", "justsml", "luishrd", "bigknell"];
+usersArray.forEach(user => {
+  getData(user);
+});
+
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -45,6 +63,46 @@ const followersArray = [];
 </div>
 
 */
+
+function createCard(userObject) {  
+  const [card, image, cardInfo, name] = ["div", "img", "div", "h3"].map(tag => {
+    return document.createElement(tag);
+  });
+  card.setAttribute("class", "card");
+  image.setAttribute("src", `${userObject.avatar_url}`);
+  cardInfo.setAttribute("class", "card-info");
+  name.setAttribute("class", "name");
+  name.textContent = userObject.name;
+  
+  const pArray = [];
+  for (let i = 0; i < 6; i++) {
+    pArray.push(document.createElement("p"));
+  }
+  const [username, location, profile, followers, following, bio] = pArray;
+  username.setAttribute("class", "username");
+  username.textContent = userObject.login;
+  location.textContent = userObject.location;
+  profile.textContent = "Profile : ";
+  const profileLink = document.createElement("a");
+  profileLink.setAttribute("href", `https://github.com/${userObject.login}/${userObject.login}.github.io`);
+  profileLink.textContent = `https://github.com/${userObject.login}/${userObject.login}.github.io`;
+  profile.appendChild(profileLink);
+  followers.textContent = `Followers: ${userObject.followers}`;
+  following.textContent = `Following: ${userObject.following}`;
+  bio.textContent = `Bio: ${userObject.bio}`;
+
+  const cardChildren = [image, cardInfo];
+  cardChildren.forEach(child => {
+    card.appendChild(child);
+  });
+
+  const cardInfoChildren = [name, username, location, profile, followers, following, bio];
+  cardInfoChildren.forEach(child => {
+    cardInfo.appendChild(child);
+  })
+
+  return card;
+}
 
 /* List of LS Instructors Github username's: 
   tetondan
