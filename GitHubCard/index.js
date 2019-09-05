@@ -7,7 +7,9 @@ function getMyData() {
   axios.get("https://api.github.com/users/CarnunMP")
   .then(response => {
     // debugger
-    console.log(createCard(response));
+    const cards = document.querySelector(".cards");
+    const myData = createCard(response.data);
+    cards.appendChild(myData);
   })
   .catch(error => {
     debugger
@@ -64,10 +66,10 @@ function createCard(userObject) {
     return document.createElement(tag);
   });
   card.setAttribute("class", "card");
-  image.setAttribute("src", `${userObject.data.avatar_url}`);
+  image.setAttribute("src", `${userObject.avatar_url}`);
   cardInfo.setAttribute("class", "card-info");
   name.setAttribute("class", "name");
-  name.textContent = userObject.data.name;
+  name.textContent = userObject.name;
   
   const pArray = [];
   for (let i = 0; i < 6; i++) {
@@ -75,16 +77,16 @@ function createCard(userObject) {
   }
   const [username, location, profile, followers, following, bio] = pArray;
   username.setAttribute("class", "username");
-  username.textContent = userObject.data.login;
-  location.textContent = userObject.data.location;
+  username.textContent = userObject.login;
+  location.textContent = userObject.location;
   profile.textContent = "Profile : ";
   const profileLink = document.createElement("a");
-  profileLink.setAttribute("href", `https://github.com/${userObject.data.login}/${userObject.data.login}.github.io`);
-  profileLink.textContent = `https://github.com/${userObject.data.login}/${userObject.data.login}.github.io`;
+  profileLink.setAttribute("href", `https://github.com/${userObject.login}/${userObject.login}.github.io`);
+  profileLink.textContent = `https://github.com/${userObject.login}/${userObject.login}.github.io`;
   profile.appendChild(profileLink);
-  followers.textContent = `Followers: ${userObject.data.followers}`;
-  following.textContent = `Following: ${userObject.data.following}`;
-  bio.textContent = `Bio: ${userObject.data.bio}`;
+  followers.textContent = `Followers: ${userObject.followers}`;
+  following.textContent = `Following: ${userObject.following}`;
+  bio.textContent = `Bio: ${userObject.bio}`;
 
   const cardChildren = [image, cardInfo];
   cardChildren.forEach(child => {
