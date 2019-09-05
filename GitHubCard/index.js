@@ -3,20 +3,23 @@
            https://api.github.com/users/<your name>
 */
 
-function getMyData() {
-  axios.get("https://api.github.com/users/CarnunMP")
+const cards = document.querySelector(".cards");
+function getData(user) {
+  axios.get(`https://api.github.com/users/${user}`)
   .then(response => {
     // debugger
-    const cards = document.querySelector(".cards");
-    const myData = createCard(response.data);
-    cards.appendChild(myData);
+    const userData = createCard(response.data);
+    cards.appendChild(userData);
   })
   .catch(error => {
     debugger
   });
 }
 
-getMyData();
+const usersArray = ["CarnunMP", "tetondan", "dustinmyers", "justsml", "luishrd", "bigknell"];
+usersArray.forEach(user => {
+  getData(user);
+});
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
